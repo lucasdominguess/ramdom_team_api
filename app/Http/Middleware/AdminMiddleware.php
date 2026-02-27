@@ -35,7 +35,7 @@ class AdminMiddleware
         //     return response()->json(['erro' => 'Acesso não autorizado.'], 403);
         // }
         // return $next($request);
-         if (Gate::allows('Gate-Admin')) { //nome do gate
+         if (Gate::allows('is-admin')) { //nome do gate
             return $next($request);
         }
 

@@ -1,34 +1,28 @@
 <?php
 
-use App\Models\Users\Role;
+
+use App\Enums\UserRoles;
+use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-        });
-        Schema::create('status', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-        });
-
-
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('status_id')->constrained('status');
+            $table->string('role')->default(UserRoles::USER->value);
+            $table->string('status')->default(UserStatus::ACTIVE->value);
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -38,7 +32,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('status');
-        Schema::dropIfExists('roles');
     }
 };

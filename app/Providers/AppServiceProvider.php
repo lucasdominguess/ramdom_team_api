@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
-use App\Enums\Roles;
 
-use App\Services\LdapService;
-use App\Services\DomPdfService;
-use App\Services\XssCleanService;
+use App\Enums\UserRoles;
 use App\Interfaces\LdapInterface;
-use App\Services\GoogleAuthService;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route;
+use App\Interfaces\PdfExporterInterface;
 use App\Interfaces\SanitizerInterface;
 use App\Interfaces\SocialAuthInterface;
+use App\Services\DomPdfService;
+use App\Services\GoogleAuthService;
+use App\Services\LdapService;
+use App\Services\XssCleanService;
+use App\Users\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\PdfExporterInterface;
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,8 +38,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Route::pattern('id', '[0-9]+');
         // Gate para verificar se o usuário é um Administrador
-        Gate::define('Gate-Admin', function ($user) {
-            // return $user->hasRole(Roles::ADMIN->label());
+        Gate::define('Is-admin', function ($user) {
+            return $user->role === UserRoles::ADMIN;
         });
     }
 }
